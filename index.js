@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 //Discord dependencies
 const Discord = require('discord.js')
 const client = new Discord.Client()
@@ -18,6 +17,28 @@ client.on('ready', () => {
 })
 
 client.on('message', msg => {
+
+  if (msg.content === '-list info'){
+      const info = 
+      `
+       -list repos: List all repos
+       -list pr: List all PR
+       -list openpr: List all open PR
+       -list closedpr: List all closed PR
+       -list download <url>: Download a file from an url    
+      `
+      msg.channel.send(info)
+  }
+  if (msg.content.includes("download")){
+      const url = msg.content.split(" ").pop()
+      msg.channel.startTyping()
+      msg.channel.send({
+        files:[url]
+      }).then((resp)=>{
+        msg.channel.stopTyping()
+      }).catch(console.error)
+  }
+
   if (msg.content === '-list repos') {
     repos().then(data=>{
       msg.reply(data);
